@@ -7,7 +7,9 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  value='0';
+  twoDigitString = '00'
+  twoDigitValue = parseInt(this.twoDigitString)
+  value=0;
   total = 0;
   constructor() {}
   btnCaps = [
@@ -18,8 +20,10 @@ export class HomePage {
   ];
 
   onButtonPress(symbol) {
-    console.log(symbol);
-    this.value=symbol;
+    if (symbol=='@15'||symbol=='@30') this.twoDigitString = '00';
+    else this.twoDigitString = this.twoDigitString.charAt(1) + symbol;    
+    this.value = parseInt(this.twoDigitString);
+
   }
 
 }
