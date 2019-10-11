@@ -1,21 +1,44 @@
+<style>
+.btn {width:30%}
+
+</style>
+
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Calculator
+      MSc Student Final Grade Calculator
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <ion-progress-bar value="{{cumulativeCredits}}"></ion-progress-bar>
+
     <ion-item>
-        <ion-label class="value">
+        <ion-label>Mod Score</ion-label>
+        <ion-label>
           {{value}}
         </ion-label>
+        
+        <ion-label>Ave Score</ion-label>
+        <ion-label>
+            {{cumulativeValue}}
+          </ion-label>
       </ion-item>
+
+    
       <div *ngFor="let numGroup of btnCaps">
-        <ion-button *ngFor="let num of numGroup" (click)="onButtonPress(num)" 
-        class="calc-button">{{num}}</ion-button>
+        <ion-button *ngFor="let num of numGroup" (click)="onButtonPress(num)" class="btn">{{num}}</ion-button>
       </div>
+
+      <ion-button (click)="reset()">Clear</ion-button>
+
+      
+    
+        <ion-list *ngFor="let data of creditScores" no-lines>
+          <ion-item>{{data.toString()}}</ion-item>
+        </ion-list>
+     
     
 
 </ion-content>
