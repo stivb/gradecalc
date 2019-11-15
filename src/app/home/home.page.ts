@@ -39,26 +39,35 @@ export class HomePage {
     [7, 8, 9],
     [4, 5, 6],
     [1, 2, 3],
-    [0, '@15','@30']
+    [0, 50,'Clear'],
+    ['@15','@30','@60']
   ];
   
 
-
+  onDeleteRequest(ct)
+  {
+    this.creditScores.splice(ct,1);
+    this.calculateTotal();
+  }
  
   
   onButtonPress(symbol) {
     
     var nc:number;
     var modTotal:number;
-    if (symbol=='@15'||symbol=='@30') 
+    if (symbol=='@15'||symbol=='@30'||symbol=='@60') 
     {
       nc = symbol.substring(1)*1;
-      this.creditScores.push(new creditScore(nc,this.value));
+      this.creditScores.push(new creditScore(this, nc,this.value));
       this.twoDigitString = '00';
       this.calculateTotal();
 
     }
-    else 
+    else if (symbol==50)
+	{
+		this.value = 50;
+	}
+	else
     {
       this.twoDigitString = this.twoDigitString.charAt(1) + symbol;    
       this.value = parseInt(this.twoDigitString);
@@ -69,6 +78,7 @@ export class HomePage {
 
   calculateTotal()
   {
+    console.log("doing calculation");
     var summation:string = "";
     var cumulativeValue=0;
     var cumulativeCredits=0;
@@ -77,24 +87,34 @@ export class HomePage {
         summation+=cs.toString();
         cumulativeCredits+=cs.numCredits;
         cumulativeValue+=cs.total;
+        console.log("Total is " + cs.total)
     }
     this.studentTotal=summation;
     this.cumulativeCredits = cumulativeCredits;
     console.log(this.cumulativeCredits.toFixed(2));
-    if (cumulativeCredits!=0) this.cumulativeValue=cumulativeValue/cumulativeCredits;
+    if (cumulativeCredits!=0) 
+	{
+		var v=cumulativeValue/cumulativeCredits;
+		this.cumulativeValue=parseInt(v.toFixed(2));
+	}
   }
 
 }
 
-class creditScore {
+
+ class creditScore {
   numCredits=15;
   score=0;
   total=0;
+  isCapped=false;
+  prent = null;
 
-  constructor(nc,s) {
+  constructor(prent, nc,s) {
+    this.prent = prent;
     this.score=s;
     this.numCredits=nc;
-    this.total=this.numCredits*this.score;
+    var mytotal = this.numCredits*this.score;
+    this.total= mytotal;
   }
   setScore(s: number) 
   {
@@ -107,8 +127,20 @@ class creditScore {
     this.total=this.numCredits*this.score;
   }
 
+  onIsCappedChange() {
+    this.total = this.getTotal();
+    this.prent.calculateTotal();
+  }
+
+  getTotal()
+  {
+    var mytotal = this.numCredits*this.score;
+    if (this.isCapped==true) mytotal = Math.min(mytotal,this.numCredits*50);
+    return mytotal;
+  }
+
   toString()
   {
-    return "" + this.numCredits + "*" +this.score + "=" + this.total + "\n";
+    return "" + this.numCredits + "*" +this.score + "=" + this.getTotal() + "\n";
   }
 }

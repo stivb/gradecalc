@@ -24,6 +24,11 @@
         <ion-label>
             {{cumulativeValue}}
           </ion-label>
+		  
+		<ion-label>Credits</ion-label>
+        <ion-label>
+            {{cumulativeCredits}}
+          </ion-label>
       </ion-item>
 
     
@@ -31,14 +36,24 @@
         <ion-button *ngFor="let num of numGroup" (click)="onButtonPress(num)" class="btn">{{num}}</ion-button>
       </div>
 
-      <ion-button (click)="reset()">Clear</ion-button>
 
       
-    
-        <ion-list *ngFor="let data of creditScores" no-lines>
-          <ion-item>{{data.toString()}}</ion-item>
-        </ion-list>
-     
+    <ion-grid *ngFor="let data of creditScores;let i = index" no-lines>
+        <ion-row>
+          <ion-col>
+              <ion-label>Cap </ion-label>
+              <ion-checkbox style="vertical-align:top" color="primary" [(ngModel)]="data.isCapped"  (ionChange)="data.onIsCappedChange()"></ion-checkbox>
+          </ion-col>
+          <ion-col><ion-label>{{data.score}}x{{data.numCredits}}</ion-label></ion-col>
+          <ion-col><ion-button (click)="onDeleteRequest(i)">Delete</ion-button></ion-col>
+        </ion-row>
+    </ion-grid>
+
+
+
+  
+
+        <ion-button (click)="reset()">Clear List</ion-button>
     
 
 </ion-content>
